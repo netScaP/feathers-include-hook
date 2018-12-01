@@ -1,0 +1,28 @@
+{
+  "name": "feathers-include-hook",
+  "version": "1.0.0",
+  "description": "Add include for models by a string",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netScaP/feathers-include-hook.git"
+  },
+  "keywords": [
+    "feathers",
+    "include",
+    "models",
+    "hook"
+  ],
+  "author": "Ali Mamaev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/netScaP/feathers-include-hook/issues"
+  },
+  "homepage": "https://github.com/netScaP/feathers-include-hook#readme",
+  "dependencies": {
+    "feathers-errors": "^2.9.2"
+  }
+}
