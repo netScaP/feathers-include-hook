@@ -8,9 +8,7 @@ module.exports = function (options = [ ]) {
     
     const raw = false;
 
-    if (!context.params.sequelize) {
-      context.params.sequelize = {};
-    }
+    context.params.sequelize = context.params.sequelize || {};
 
     const include = loopIncludes(options, models);
 
@@ -22,6 +20,9 @@ module.exports = function (options = [ ]) {
 
 function loopIncludes(modelsArr, models) {
   const include = modelsArr.map(obj => {
+    if (typeof obj === 'string') {
+      return models[obj];
+    }
     if (obj.include) {
       obj.include = loopIncludes(obj.include, models);
     }

@@ -4,18 +4,21 @@ Hooks for include before
 ```
 context => {
   const sequelize = context.app.get('sequelizeClient');
-  const { myModel, anotherModel } = sequelize.models;
+  const { myModel, anotherModel, singleModel } = sequelize.models;
   
   const raw = false;
 
   context.params.sequelize = {
     include: [
-      model: myModel,
-      as: 'MyModels',
-      where: {
-        smth: 'likeSmth'
+      {
+        model: myModel,
+        as: 'MyModels',
+        where: {
+          smth: 'likeSmth'
+        },
+        include: [anotherModel]
       },
-      include: [anotherModel]
+      singleModel
     ]
   }
   return context;
@@ -48,7 +51,8 @@ module.exports = {
               model: 'anotherModel'
             }
           ]
-        }
+        },
+        'signleModel'
       ])
     ]
   }
