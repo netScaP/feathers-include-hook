@@ -44,7 +44,7 @@ function loopIncludes(modelsArr, models, context) {
 
 function loopContext(object, context) {
   for (let key in object) {
-    if (key === 'context') {
+    if (key === 'context' || typeof object[key] === 'object') {
       loopContext(object[key], context);
     }
     if (object[key].charAt(0) === '$') {
