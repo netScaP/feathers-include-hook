@@ -48,7 +48,12 @@ module.exports = {
           },
           include: [
             {
-              model: 'anotherModel'
+              model: 'anotherModel',
+              context: {
+                where: {
+                  idField: '$user.id'
+                }
+              }
             }
           ]
         },

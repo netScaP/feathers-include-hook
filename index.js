@@ -10,7 +10,7 @@ module.exports = function (options = [ ]) {
 
     context.params.sequelize = context.params.sequelize || {};
 
-    const include = loopIncludes(options, models);
+    const include = loopIncludes(options, models, context);
 
     Object.assign(context.params.sequelize, { include, raw });
 
@@ -18,7 +18,7 @@ module.exports = function (options = [ ]) {
   };
 };
 
-function loopIncludes(modelsArr, models) {
+function loopIncludes(modelsArr, models, context) {
   const include = modelsArr.map(obj => {
     if (typeof obj === 'string') {
       return models[obj];
@@ -29,6 +29,9 @@ function loopIncludes(modelsArr, models) {
     if (!obj.model) {
       throw new errors.BadRequest('Model must be included');
     }
+    if (obj.context) {
+      obj.context = loopContext(obj.context, context);
+    }
 
     return {
       ...obj,
@@ -37,4 +40,23 @@ function loopIncludes(modelsArr, models) {
   });
 
   return include;
+}
+
+function loopContext(object, context) {
+  for (let key in object) {
+    if (key === 'context') {
+      loopContext(object[key], context);
+    }
+    if (object[key].charAt(0) === '$') {
+      object[key] = set(object[key].slice(1), context);
+    }
+  }
+}
+
+function set(path, obj) {
+  path = path.split('.');
+  for (let i = 1; i < path.length - 1; i++) {
+    obj = obj[path[i]];
+  }
+  return obj;
 }
