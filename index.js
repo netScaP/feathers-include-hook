@@ -30,7 +30,8 @@ function loopIncludes(modelsArr, models, context) {
       throw new errors.BadRequest('Model must be included');
     }
     if (obj.context) {
-      obj.context = loopContext(obj.context, context);
+      obj = Object.assign({}, obj, loopContext(obj.context, context));
+      delete obj.context;
     }
 
     return {
@@ -44,18 +45,25 @@ function loopIncludes(modelsArr, models, context) {
 
 function loopContext(object, context) {
   for (let key in object) {
-    if (key === 'context' || typeof object[key] === 'object') {
-      loopContext(object[key], context);
+    if (key === 'context') {
+      object = Object.assing({}, object, loopContext(object[key], context));
+      delete obj.context;
+      continue;
+    }
+    if (typeof object[key] === 'object') {
+      object[key] = loopContext(object[key], context);
+      continue;
     }
     if (object[key].charAt(0) === '$') {
-      object[key] = set(object[key].slice(1), context);
+      object[key] = getByPath(object[key].slice(1), context);
     }
   }
+  return object;
 }
 
-function set(path, obj) {
+function getByPath(path, obj) {
   path = path.split('.');
-  for (let i = 1; i < path.length - 1; i++) {
+  for (let i = 0; i < path.length; i++) {
     obj = obj[path[i]];
   }
   return obj;
