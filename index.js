@@ -24,20 +24,20 @@ function loopIncludes(modelsArr, models, context) {
       return models[obj];
     }
     if (obj.include) {
-      obj.include = loopIncludes(obj.include, models);
+      obj.include = loopIncludes(obj.include, models, context);
     }
     if (!obj.model) {
       throw new errors.BadRequest('Model must be included');
+    }
+    if (typeof obj.model === 'string') {
+      obj.model = models[obj.model];
     }
     if (obj.context) {
       obj = Object.assign({}, obj, loopContext(obj.context, context));
       delete obj.context;
     }
 
-    return {
-      ...obj,
-      model: models[obj.model]
-    }
+    return obj;
   });
 
   return include;

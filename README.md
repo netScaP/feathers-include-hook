@@ -51,7 +51,7 @@ module.exports = {
               model: 'anotherModel',
               context: {
                 where: {
-                  idField: '$user.id'
+                  idField: '$params.user.id'
                 }
               }
             }
